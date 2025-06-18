@@ -1,4 +1,4 @@
-# https://github.com/unixource/antiswear-ru v.1 main 
+# https://codeberg.org/unixource/antiswear-ru v.2
 
 bpss = [
         ("ia", "я"),
