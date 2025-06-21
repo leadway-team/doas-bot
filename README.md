@@ -1,13 +1,47 @@
 # KGB_Bot-telegram
-The one and only KGB bot for telegram!
-## This bot has the following features:
-1. The `uptime` command to determine the continuous operation time of the bot.  
-2. The `quote` command sends a random quote from the quotes.txt file.  
-3. The `add_user` command adds a user for monitoring to the users.txt file.  
-4. The `remove_user` command removes a user from the monitoring list in the users.txt file.
-5. The main loop checks if the message belongs to a user who is on the monitoring list.  
-If the user is on the monitoring list, the bot checks each word in their message.  
-If the word looks like a swear word from the swearing list, the bot checks if the word is on the exception list.  
-If the word is on the exception list, the bot does nothing, and if the word is a swear word, user's message is deleted.
-## Important note!
-The quotes.txt, swearing.txt, users.txt and exceptions.txt files must be created manually in advance!
+
+![Language](https://img.shields.io/badge/language%20-%20Python-blue)
+![OS](https://img.shields.io/badge/OS-linux-blue)
+![License](https://img.shields.io/github/license/lina-torovoltas/KGB_Bot-telegram)</br>
+
+The one and only KGB bot for telegram!</br>
+This is my attempt to transfer the legendary KGB_Bot-discord to Telegram.
+
+
+## Installing
+Clone this repository and prepare your environment:
+
+```bash
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+chmod +x start-bot.sh
+```
+
+And start:
+
+```bash
+./start-bot.sh
+```
+
+
+## Dependencies
+
+- Linux operating system
+- Python 3.9+
+
+
+## Commands
+
+See all available commands in [COMMANDS.md](COMMANDS.md) and their usage.
+
+
+## Contributing
+
+Contributions are welcome!</br>
+Feel free to open pull requests to improve the bot.
+
+
+## Author
+
+Developed by <a href="https://github.com/lina-torovoltas" style="color:#ff4f00">Lina Torovoltas</a> — © 2025 All rights reserved.
