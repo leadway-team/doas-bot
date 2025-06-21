@@ -21,7 +21,7 @@ pip install -r requirements.txt
 chmod +x start-bot.sh
 ```
 
-And start:
+And run:
 
 ```bash
 ./start-bot.sh
