@@ -13,7 +13,7 @@ This is my attempt to transfer the legendary KGB_Bot-discord to Telegram.
 Clone this repository and prepare your environment:
 
 ```bash
-git clone lina-torovoltas/KGB_Bot-telegram
+git clone https://github.com/lina-torovoltas/KGB_Bot-telegram
 cd KGB_Bot-telegram
 python3 -m venv env
 source env/bin/activate
