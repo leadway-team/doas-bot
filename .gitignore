@@ -8,3 +8,4 @@ lib/
 temp.log
 temp2.log
 config/
+config/*
