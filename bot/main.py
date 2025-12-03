@@ -8,16 +8,21 @@ import logging
 import sys
 
 from os import getenv
-from antiswear import *
+#from antiswear import *  ---------- no need
 from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from telebot.async_telebot import AsyncTeleBot
 
-# preparing
-open("users.txt", "a").close() 
+TOKEN = str()
 
+try:
+    with open("config/token.txt", "r", encoding="utf-8") as f:
+        TOKEN = str(f.read().strip())
+        print(TOKEN)
+except (FileNotFoundError):
+    print("Hey there! There is no config/token.txt file!")
 
-kgb = AsyncTeleBot(getenv('TOKEN', ''))
+doas = AsyncTeleBot(TOKEN)
 
 # Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,7 +32,7 @@ start_time = datetime.now(timezone.utc)
 
 
 # Loads the question-and-answer database
-db_file = "db.json"
+db_file = "config/db.json"
 
 def load_db():
     try:
@@ -47,9 +52,9 @@ db = load_db()
 # User verification function for administrator rights
 async def is_user_admin(chat_id, user_id):
     admin_statuses = ["creator", "administrator"]
-    if str(user_id) == "YOUR_ID": # God mode hehe:3
+    if str(user_id) == "YOUR_ID": # God mode
         return 1
-    result = await kgb.get_chat_member(chat_id, user_id)
+    result = await doas.get_chat_member(chat_id, user_id)
     if result.status in admin_statuses:
         return 1
     return 0
@@ -92,10 +97,10 @@ def is_duplicate(question, answer):
 
 
 # Command to add a new question-answer pair
-@kgb.message_handler(commands=["teach"])
+@doas.message_handler(commands=["teach"])
 async def terach(message):
     if "=" not in message.text:
-        await kgb.reply_to(message, "Usage: /teach Question=Answer")
+        await doas.reply_to(message, "Usage: /teach Question=Answer")
         return
     
     _, data = message.text.split("/teach", 1)
@@ -107,34 +112,34 @@ async def terach(message):
         db.append({"question": question, "answer": answer})
         save_db(db)
         logging.info(f"A new pair has been added: {question} = {answer}")
-        await kgb.reply_to(message, "Got it!")
+        await doas.reply_to(message, "Got it!")
     else:
-        await kgb.reply_to(message, "Such a question-answer pair already exists.")
+        await doas.reply_to(message, "Such a question-answer pair already exists.")
 
 
 # Command to ask the bot a question
-@kgb.message_handler(commands=["ask"])
+@doas.message_handler(commands=["ask"])
 async def ask(message):
     _, question = message.text.split("/ask", 1)
     question = question.strip().lower()
     best_match = find_best_match(question)
     
     if best_match:
-        await kgb.reply_to(message, best_match["answer"])
+        await doas.reply_to(message, best_match["answer"])
     else:
-        await kgb.reply_to(message, "I don't know the answer to that.")
+        await doas.reply_to(message, "I don't know the answer to that.")
 
 
 # Sending a quote
-@kgb.message_handler(commands=['quote'])
+@doas.message_handler(commands=['quote'])
 async def quote(message):
-    fortun = fortune.get_random_fortune('quotes.txt')
+    fortun = fortune.get_random_fortune('config/quotes.txt')
     
-    await kgb.reply_to(message,f'`{fortun}`')
+    await doas.reply_to(message,f'`{fortun}`')
 
 
 # Adding a user to the users monitoring list
-@kgb.message_handler(commands=['add_user'])
+@doas.message_handler(commands=['add_user'])
 async def add_user(message):
     chat_id = message.chat.id
     user_id = message.from_user.id
@@ -142,12 +147,12 @@ async def add_user(message):
 
     # Checking a user for administrator rights
     if result == 0:
-        await kgb.reply_to(message, "You do not have permission to run this command.")
+        await doas.reply_to(message, "You do not have permission to run this command.")
         return
     # Checking a command for an argument
     args = message.text.split()
     if len(args) < 2:
-        await kgb.reply_to(message, "Please enter a user ID. \nExample: /add_user 123123123")
+        await doas.reply_to(message, "Please enter a user ID. \nExample: /add_user 123123123")
         return
 
     user_to_add = args[1]
@@ -155,27 +160,27 @@ async def add_user(message):
 
     # Handling errors and adding a user to the list
     try:
-        with open('users.txt', 'r') as file:
+        with open('config/users.txt', 'r') as file:
             existing_users = file.read().splitlines()
 
         # Sending an error message that the user is already on the list
         if user_to_add in (user.lower() for user in existing_users):
-            await kgb.reply_to(message, f"The user ID '{user_to_add}' already exists in the list.")
+            await doas.reply_to(message, f"The user ID '{user_to_add}' already exists in the list.")
             return
 
         # Adding a user to the list
-        with open('users.txt', 'a') as file:
+        with open('config/users.txt', 'a') as file:
             file.write(f'\n{user_to_add}')
 
         # Sending a message that the user has been successfully added to the list
-        await kgb.reply_to(message, f"User ID '{user_to_add}' added.")
+        await doas.reply_to(message, f"User ID '{user_to_add}' added.")
     # Sending an error message
     except Exception as e:
-        await kgb.reply_to(message, f"An error occurred: {str(e)}")
+        await doas.reply_to(message, f"An error occurred: {str(e)}")
 
 
 # Removing a user from the users monitoring list
-@kgb.message_handler(commands=['remove_user'])
+@doas.message_handler(commands=['remove_user'])
 async def remove_user(message):
     chat_id = message.chat.id
     user_id = message.from_user.id
@@ -183,12 +188,12 @@ async def remove_user(message):
 
     # Checking a user for administrator rights
     if result == 0:
-        await kgb.reply_to(message, "You do not have permission to run this command.")
+        await doas.reply_to(message, "You do not have permission to run this command.")
         return
     # Checking a command for an argument
     args = message.text.split()
     if len(args) < 2:
-        await kgb.reply_to(message, "Please enter user ID. \nExample: /remove_user 123123123")
+        await doas.reply_to(message, "Please enter user ID. \nExample: /remove_user 123123123")
         return
 
     user_id_to_remove = args[1]
@@ -196,27 +201,27 @@ async def remove_user(message):
 
     # Handling errors and removing a user from the list
     try:
-        with open('users.txt', 'r') as file:
+        with open('config/users.txt', 'r') as file:
             users = file.readlines()
             
         # Removing a user from the list
-        with open('users.txt', 'w') as file:
+        with open('config/users.txt', 'w') as file:
             for user in users:
                 if user.strip() != user_id_to_remove:
                     file.write(user)
 
         # Sending a message that the user has been successfully removed from the list
-        await kgb.reply_to(message, f"User ID: {user_id_to_remove} has been removed.")
+        await doas.reply_to(message, f"User ID: {user_id_to_remove} has been removed.")
     # Sending an error message that the file with the list of users was not found
     except FileNotFoundError:
-        await kgb.reply_to(message, "User list not found.")
+        await doas.reply_to(message, "User list not found.")
     # Sending an error message
     except Exception as e:
-        await kgb.reply_to(message, f"An error occurred: {str(e)}")
+        await doas.reply_to(message, f"An error occurred: {str(e)}")
 
 
 # Command to find out how long the bot has been running
-@kgb.message_handler(commands=['uptime'])
+@doas.message_handler(commands=['uptime'])
 async def send_uptime(message):
     current_time = datetime.now(timezone.utc)
     uptime_duration = current_time - start_time
@@ -228,11 +233,11 @@ async def send_uptime(message):
 
     # Formatting and sending a message to a user
     uptime_str = f"{days} days, {hours} hours, {minutes} minutes."
-    await kgb.send_message(message.chat.id, f'The bot has been running for: \n{uptime_str}')
+    await doas.send_message(message.chat.id, f'The bot has been running for: \n{uptime_str}')
 
 
 # Function for searching and removing swear words from users in the monitoring list
-@kgb.message_handler(func=lambda message: True)
+@doas.message_handler(func=lambda message: True)
 async def checking_messages(message):
     text = message.text
     user_id = str(message.from_user.id)
@@ -242,19 +247,20 @@ async def checking_messages(message):
     # Handling errors and searching/removing swear words from users from the monitoring list
     try:
         # Reading files with a list of users
-        with open("users.txt", "r") as user_content:
+        with open("config/users.txt", "r") as user_content:
             users_check = user_content.read().split()
 
         logging.info(f"Message checking: ID = {user_id}, Username = @{user_name}")  # Debugging to the console
-
+        
+        # !!! NO NEED !!!
         # Searching for a user in the list of users to monitoring
-        if user_id in users_check:
-            # Searching for swear words in user's text
-            for word in text_cleaning:
-                if check(word):
-                    logging.info(f"Message removed, word '{word}', message {text_cleaning}")   # Debugging to the console
-                    await kgb.delete_message(message.chat.id, message.id)
-                    return
+        #if user_id in users_check:
+        #    # Searching for swear words in user's text
+        #    for word in text_cleaning:
+        #        if check(word):
+        #            logging.info(f"Message removed, word '{word}', message {text_cleaning}")   # Debugging to the console
+        #            await doas.delete_message(message.chat.id, message.id)
+        #            return
     # Sending an error message that files were not found
     except FileNotFoundError as e:
         logging.info(f"File not found: {str(e)}")
@@ -266,5 +272,5 @@ async def checking_messages(message):
 
 # Running a bot
 if __name__ == '__main__':
-    print("KGB bot is turned on!")
-    asyncio.run(kgb.polling())
+    print("doas!bot is turned on!")
+    asyncio.run(doas.polling())
