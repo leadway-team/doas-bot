@@ -38,7 +38,7 @@ def register():
         
         args = message.text.split()
         if len(args) < 2:
-            await doas.reply_to(message, "Please enter a user ID. \nExample: /unban 123123123")
+            await doas.reply_to(message, f"Please enter a user ID. \nExample: {args[0]} 123123123")
         
         await doas.unban_chat_member(message.chat.id, args[1])
         await doas.reply_to(message, f"User with ID {args[1]} now is unbanned.")
@@ -54,7 +54,7 @@ def register():
         
         args = message.text.split()
         if len(args) < 2:
-            await doas.reply_to(message, "Please enter a user ID. \nExample: /ban 123123123")
+            await doas.reply_to(message, "Please enter a user ID. \nExample: /kick 123123123")
         
         await doas.kick_chat_member(message.chat.id, args[1])
         await doas.unban_chat_member(message.chat.id, args[1])

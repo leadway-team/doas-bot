@@ -1,6 +1,12 @@
 import random
+import requests
+import json
 
 doas = None
+
+async def json_animal_api(animal):
+    resp = requests.get(url=f"https://some-random-api.com/animal/{animal}")
+    return resp.json()
 
 def register():
     @doas.message_handler(commands=["hack", "heck"])
@@ -38,3 +44,11 @@ def register():
         ]
         
         await doas.reply_to(message, random.choice(ball_status))
+    
+    @doas.message_handler(commands=["cat", "dog", "fox"])
+    async def animal(message):
+        args = message.text.split()
+        
+        a = await json_animal_api(args[0].replace("/", ""))
+        
+        await doas.send_photo(message.chat.id, a["image"])
