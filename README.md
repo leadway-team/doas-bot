@@ -48,4 +48,4 @@ Developed by:
 1. <a href="https://github.com/svz-code">arducat</a> — © 2023 All rights reserved.
 2. <a href="https://github.com/lina-torovoltas" style="color:#ff4f00">Lina Torovoltas</a> — © 2025 All rights reserved.
 3. <a href="https://github.com/simile-or-not">Simile (or not?)</a> — © 2025 All rights reserved.
-4. 1. <a href="https://github.com/svz-code">SvZ_Code</a> — © 2026 All rights reserved.
+4. <a href="https://github.com/svz-code">SvZ_Code</a> — © 2026 All rights reserved.
