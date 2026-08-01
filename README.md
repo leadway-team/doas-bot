@@ -1,13 +1,10 @@
-# doas!bot
+# Soze!Bot
 
 ![Language](https://img.shields.io/badge/language%20-%20Python-blue)
-![License](https://img.shields.io/github/license/leadway-team/doas-bot)
-![GitHub last commit](https://img.shields.io/github/last-commit/leadway-team/doas-bot)</br>
+![License](https://img.shields.io/github/license/svz-code/soze-bot)
+![GitHub last commit](https://img.shields.io/github/last-commit/svz-code/soze-bot)</br>
 
-doas!bot is the reincarnation of a little-known Discord bot, $sudo-bot.</br>
-KGB Modern, which we forked, was a fork of $sudo-bot.</br>
-The $sudo-bot itself was developed by a friend of the founder of LeadWay, @arducat</br>
-Now it's our turn to fork and continue the great work of $sudo-bot.
+Soze!Bot - Telegram bot.
 
 ## Installing
 Clone this repository and prepare your environment:
@@ -48,6 +45,7 @@ Feel free to open pull requests to improve the bot.
 ## Author
 
 Developed by:
-1. <a href="https://github.com/arducat">arducat</a> — © 2023 All rights reserved.
+1. <a href="https://github.com/svz-code">arducat</a> — © 2023 All rights reserved.
 2. <a href="https://github.com/lina-torovoltas" style="color:#ff4f00">Lina Torovoltas</a> — © 2025 All rights reserved.
 3. <a href="https://github.com/simile-or-not">Simile (or not?)</a> — © 2025 All rights reserved.
+4. 1. <a href="https://github.com/svz-code">SvZ_Code</a> — © 2026 All rights reserved.
